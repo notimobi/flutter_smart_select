@@ -85,7 +85,8 @@ class SmartSelect<T> extends StatefulWidget {
   final S2Validation<S2SingleChosen<T>> singleModalValidation;
 
   /// Called when value changed in single choice widget
-  final ValueChanged<S2SingleSelected<T>> singleOnChange;
+  // final ValueChanged<S2SingleSelected<T>> singleOnChange;
+  final ValueChanged<S2SingleSelection<T>>? singleOnChange;
 
   /// Called when selection has been made in single choice widget
   final S2ChoiceSelect<S2SingleState<T>, S2Choice<T>> singleOnSelect;
@@ -377,7 +378,8 @@ class SmartSelect<T> extends StatefulWidget {
     T selectedValue,
     S2Choice<T> selectedChoice,
     S2SingleSelectedResolver<T> selectedResolver,
-    ValueChanged<S2SingleSelected<T>> onChange,
+    // ValueChanged<S2SingleSelected<T>> onChange,
+    ValueChanged<S2SingleSelection<T>> onChange,
     S2ChoiceSelect<S2SingleState<T>, S2Choice<T>> onSelect,
     S2ModalOpen<S2SingleState<T>> onModalOpen,
     S2ModalClose<S2SingleState<T>> onModalClose,
@@ -1689,8 +1691,10 @@ class S2SingleState<T> extends S2State<T> {
   void onChange() {
     // set cache to final value
     // setState(() => selected = selected.copyWith(choice: selection.choice));
-    selected.choice = selection.choice;
-    widget.singleOnChange?.call(selected);
+    // Fred: shall not chance selected yet
+    // selected!.choice = selection!.choice;
+    // widget.singleOnChange?.call(selected!);
+    widget.singleOnChange?.call(selection!);
   }
 
   @override
@@ -1768,6 +1772,7 @@ class S2SingleState<T> extends S2State<T> {
 
   @override
   Widget build(BuildContext context) {
+    this.selected?.choice = widget.singleSelected?.choice; // or resolveSelected();?
     return builder?.tile?.call(context, this) ?? defaultTile;
   }
 
